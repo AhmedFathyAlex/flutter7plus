@@ -1,38 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter7plus/News%20App/AllNews.dart';
 import 'package:flutter7plus/News%20App/BuisnessNews.dart';
+import 'package:flutter7plus/News%20App/NewsBloc/NewsCubit.dart';
+import 'package:flutter7plus/News%20App/NewsBloc/NewsStates.dart';
 import 'package:flutter7plus/News%20App/SportsNews.dart';
-class NewsHome extends StatefulWidget {
-  const NewsHome({Key? key}) : super(key: key);
+import 'package:flutter_bloc/flutter_bloc.dart';
+class NewsHome extends StatelessWidget {
 
-  @override
-  _NewsHomeState createState() => _NewsHomeState();
-}
-
-class _NewsHomeState extends State<NewsHome> {
-  int index = 0;
-  List<String> appBarTitles = ['All News', 'Sports','Buisness'];
-  List<Widget> scaffoldBodies = [AllNew(),Sports(),Buisness()];
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(appBarTitles[index]),
-      ),
-      body: scaffoldBodies[index],
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon:Icon(Icons.list_alt),label: "All"),
-          BottomNavigationBarItem(icon:Icon(Icons.sports_football) ,label: "Sports"),
-          BottomNavigationBarItem(icon: Icon(Icons.monetization_on),label: "Buisness"),
-        ],
-        currentIndex: index,
-        onTap: (newIndex){
-          setState(() {
-            index = newIndex;
-          });
-        },
-      ),
-    );
+    return BlocProvider(
+      create: (context)=> NewsCubit()..getAllNews()..getBuisnessNews()..getSportsNews(),
+      child: BlocConsumer<NewsCubit,NewsStates>(
+          listener:(context,state){},
+          builder:(context,state){
+            var myCubit = NewsCubit.getNewsCubit(context);
+            return Scaffold(
+                appBar: AppBar(
+                title: Text(myCubit.appBarTitles[myCubit.index])),
+       body: myCubit.scaffoldBodies[myCubit.index],
+    bottomNavigationBar: BottomNavigationBar(
+    items: [
+    BottomNavigationBarItem(icon:Icon(Icons.list_alt),label: "All"),
+    BottomNavigationBarItem(icon:Icon(Icons.sports_football) ,label: "Sports"),
+    BottomNavigationBarItem(icon: Icon(Icons.monetization_on),label: "Buisness"),
+    ],
+    currentIndex: myCubit.index,
+    onTap: (newIndex){
+      myCubit.changeIndex(newIndex);
+    }
+    ));
   }
+    ));
 }
+}
+

@@ -1,16 +1,25 @@
+import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter7plus/Api.dart';
 import 'package:flutter7plus/Authorization/LoginScreen.dart';
+import 'package:flutter7plus/Bloc/BlocObserver.dart';
+import 'package:flutter7plus/Bloc/CounterBloc.dart';
+import 'package:flutter7plus/Firebase%20Authentication/Login.dart';
+import 'package:flutter7plus/Firebase%20Authentication/Register.dart';
 import 'package:flutter7plus/News%20App/NewsHome.dart';
 import 'package:flutter7plus/Authorization/Register.dart';
 import 'package:flutter7plus/Revision.dart';
 import 'package:flutter7plus/TODO/TODO_Home.dart';
 import 'package:flutter7plus/finalTest.dart';
 import 'Home.dart';
-void main(){
+void main()async{
+  Bloc.observer = MyBlocObserver();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Revision(),
+    home: LoginFirebase(),
   )
   );
 }
